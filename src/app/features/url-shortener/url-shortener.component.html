@@ -8,13 +8,14 @@
             <div *ngIf="urlForm.controls.longUrl.touched && urlForm.controls.longUrl.invalid"
                 class="alert alert-danger">
                 <div *ngIf="urlForm.controls.longUrl.errors.required">URL is required</div>
-                <div *ngIf="urlForm.controls.longUrl.errors.pattern">Please enter valid url</div>
+                <div *ngIf="!urlForm.controls.longUrl.errors.required
+                && urlForm.controls.longUrl.errors.invalidUrl">Please enter valid url</div>
             </div>
         </div>
         
         <div class="row">
             <div class="col">
-            <button class="btn btn-success" [disabled]="!urlForm.touched && !urlForm.valid"
+            <button class="btn btn-success" [disabled]="!urlForm.valid"
                 type="submit">Shorten</button>
             </div>
         </div>

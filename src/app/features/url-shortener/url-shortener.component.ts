@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UrlShortenerService } from './url-shortener.service';
+import { ValidatorFn, AbstractControl } from '@angular/forms';
 
 @Component({
   selector: 'url-shortener',
@@ -14,9 +15,18 @@ export class UrlShortenerComponent implements OnInit {
   constructor(private urlShortenerService: UrlShortenerService) { }
 
   ngOnInit(): void {
-    const reg = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
+    let urlValidator : ValidatorFn = (control: AbstractControl) => {
+      let validUrl = true;
+      try {
+        new URL(control.value)
+      } catch {
+        validUrl = false;
+      }
+  
+      return validUrl ? null : { invalidUrl: true };
+    }
     this.urlForm = new FormGroup({
-      longUrl: new FormControl('', [Validators.required, Validators.pattern(reg)])
+      longUrl: new FormControl('', [Validators.required, urlValidator])
     });
   }
 

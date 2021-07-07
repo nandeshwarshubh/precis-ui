@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { UrlShortenerComponent } from './url-shortener.component';
 import { UrlShortenerService } from './url-shortener.service';
@@ -15,6 +15,7 @@ import { UrlShortenerService } from './url-shortener.service';
     imports: [
         BrowserModule,
         HttpClientModule,
+        FormsModule,
         ReactiveFormsModule
     ],
     providers: [UrlShortenerService],
