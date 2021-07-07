@@ -21,13 +21,11 @@ export class UrlShortenerComponent implements OnInit {
   }
 
   onSubmit(form: FormGroup) {
-    // this.urlShortenerService.createShortUrl(form.value.longUrl).subscribe(data => {
-    //   this.shortUrl = data;
-    // }, err => {
-    //   console.log(err);
-    // });
-
-    this.shortUrl = "http://localhost:4200/GRNHv-Vd"
+    this.urlShortenerService.createShortUrl(form.value.longUrl).subscribe(data => {
+      this.shortUrl = data.shortUrl;
+    }, err => {
+      console.log(err);
+    });
   }
 
 }
