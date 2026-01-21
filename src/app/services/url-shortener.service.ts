@@ -23,14 +23,14 @@ export class UrlShortenerService {
     const headers = this.getHeaders();
     return this.http
       .post<ShortenUrlResponse>(`${this.apiBaseUrl}/shorten`, request, { headers })
-      .pipe(catchError(this.handleError));
+      .pipe(catchError((error) => this.handleError(error)));
   }
 
   getLongUrl(request: GetLongUrlRequest): Observable<GetLongUrlResponse> {
     const headers = this.getHeaders();
     return this.http
       .post<GetLongUrlResponse>(`${this.apiBaseUrl}/long`, request, { headers })
-      .pipe(catchError(this.handleError));
+      .pipe(catchError((error) => this.handleError(error)));
   }
 
   generateAliasSuggestions(baseAlias: string): string[] {

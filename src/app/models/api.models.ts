@@ -46,3 +46,31 @@ export interface FormState {
   isSubmitting: boolean;
 }
 
+export class UrlUtils {
+  /**
+   * Extracts the short code from a short URL or returns it if already a code
+   * @param shortUrl - Short URL or code (e.g., "http://localhost:4200/piP7LyCL" or "piP7LyCL")
+   * @returns Short code (e.g., "piP7LyCL")
+   */
+  static extractShortCode(shortUrl: string): string {
+    if (!shortUrl) {
+      return '';
+    }
+
+    // If it's already just a code (no slashes or protocol), return as-is
+    if (!shortUrl.includes('/') && !shortUrl.includes(':')) {
+      return shortUrl;
+    }
+
+    try {
+      // Try parsing as URL
+      const url = new URL(shortUrl);
+      return url.pathname.substring(1); // Remove leading slash
+    } catch {
+      // If URL parsing fails, extract last segment after slash
+      const parts = shortUrl.split('/');
+      return parts[parts.length - 1];
+    }
+  }
+}
+

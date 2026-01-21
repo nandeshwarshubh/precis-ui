@@ -1,3 +1,5 @@
+import { MESSAGES } from '../i18n';
+
 export class UrlValidators {
   private static readonly URL_PATTERN =
     /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$/;
@@ -33,14 +35,14 @@ export class UrlValidators {
 
   static getUrlErrorMessage(url: string): string {
     if (!url || url.trim().length === 0) {
-      return 'URL is required';
+      return MESSAGES.validation.urlRequired;
     }
     const trimmedUrl = url.trim();
     if (trimmedUrl.length > this.MAX_URL_LENGTH) {
-      return `URL cannot exceed ${this.MAX_URL_LENGTH} characters`;
+      return MESSAGES.validation.urlTooLong(this.MAX_URL_LENGTH);
     }
     if (!this.URL_PATTERN.test(trimmedUrl)) {
-      return 'Invalid URL format. Please ensure your link starts with http:// or https://';
+      return MESSAGES.validation.urlInvalidFormat;
     }
     return '';
   }
@@ -54,10 +56,10 @@ export class UrlValidators {
       trimmedAlias.length < this.MIN_ALIAS_LENGTH ||
       trimmedAlias.length > this.MAX_ALIAS_LENGTH
     ) {
-      return `Custom alias must be between ${this.MIN_ALIAS_LENGTH} and ${this.MAX_ALIAS_LENGTH} characters`;
+      return MESSAGES.validation.aliasLengthInvalid(this.MIN_ALIAS_LENGTH, this.MAX_ALIAS_LENGTH);
     }
     if (!this.CUSTOM_ALIAS_PATTERN.test(trimmedAlias)) {
-      return 'Custom alias can only contain letters, numbers, hyphens, and underscores';
+      return MESSAGES.validation.aliasInvalidFormat;
     }
     return '';
   }

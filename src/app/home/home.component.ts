@@ -3,7 +3,9 @@ import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UrlShortenerService } from '../services/url-shortener.service';
 import { UrlValidators } from '../utils/validators';
-import { UiState, ApiErrorResponse } from '../models/api.models';
+import { UiState, ApiErrorResponse, UrlUtils } from '../models/api.models';
+import { environment } from '../../environments/environment';
+import { MESSAGES } from '../i18n';
 
 @Component({
   selector: 'app-home',
@@ -22,6 +24,15 @@ export class HomeComponent {
   protected readonly conflictSuggestions = signal<string[]>([]);
   protected readonly uiState = signal<UiState>('landing');
   protected readonly isSubmitting = signal(false);
+
+  // Expose messages to template
+  protected readonly messages = MESSAGES;
+
+  // Computed property for UI base URL display (without protocol)
+  protected readonly uiBaseUrlDisplay = computed(() => {
+    const url = environment.uiBaseUrl;
+    return url.replace(/^https?:\/\//, '');
+  });
 
   protected readonly urlError = computed(() => {
     const url = this.longUrl();
@@ -43,7 +54,7 @@ export class HomeComponent {
     return this.isFormValid() && !this.isSubmitting();
   });
 
-  async onSubmit(): Promise<void> {
+  onSubmit(): void {
     if (!this.canSubmit()) {
       return;
     }
@@ -52,38 +63,38 @@ export class HomeComponent {
     this.errorMessage.set('');
     this.conflictSuggestions.set([]);
 
-    try {
-      const trimmedAlias = this.alias().trim();
-      const request = {
-        longUrl: this.longUrl().trim(),
-        ...(trimmedAlias && { customAlias: trimmedAlias }),
-      };
+    const trimmedAlias = this.alias().trim();
+    const request = {
+      longUrl: this.longUrl().trim(),
+      ...(trimmedAlias && { customAlias: trimmedAlias }),
+    };
 
-      const response = await this.urlShortenerService.shortenUrl(request).toPromise();
-
-      if (response?.shortUrl) {
-        this.shortUrl.set(response.shortUrl);
+    this.urlShortenerService.shortenUrl(request).subscribe({
+      next: (response) => {
+        // Extract short code from API response and construct UI-based URL
+        const shortCode = UrlUtils.extractShortCode(response.shortUrl);
+        const uiShortUrl = `${environment.uiBaseUrl}/${shortCode}`;
+        this.shortUrl.set(uiShortUrl);
         this.uiState.set('success');
-      }
-    } catch (error) {
-      const apiError = error as ApiErrorResponse;
-
-      switch (apiError.error) {
-        case 'ALIAS_ALREADY_EXISTS':
-          this.handleAliasConflict(apiError);
-          break;
-        case 'VALIDATION_ERROR':
-          this.handleValidationError(apiError);
-          break;
-        case 'NOT_FOUND':
-        case 'INTERNAL_SERVER_ERROR':
-        default:
-          this.handleGenericError(apiError);
-          break;
-      }
-    } finally {
-      this.isSubmitting.set(false);
-    }
+        this.isSubmitting.set(false);
+      },
+      error: (error: ApiErrorResponse) => {
+        switch (error.error) {
+          case 'ALIAS_ALREADY_EXISTS':
+            this.handleAliasConflict(error);
+            break;
+          case 'VALIDATION_ERROR':
+            this.handleValidationError(error);
+            break;
+          case 'NOT_FOUND':
+          case 'INTERNAL_SERVER_ERROR':
+          default:
+            this.handleGenericError(error);
+            break;
+        }
+        this.isSubmitting.set(false);
+      },
+    });
   }
 
   private handleAliasConflict(error: ApiErrorResponse): void {
@@ -120,7 +131,7 @@ export class HomeComponent {
     }
 
     try {
-      await navigator.clipboard.writeText(`https://precis.link/${this.shortUrl()}`);
+      await navigator.clipboard.writeText(this.shortUrl());
     } catch (err) {
       // Silently fail on copy error
     }

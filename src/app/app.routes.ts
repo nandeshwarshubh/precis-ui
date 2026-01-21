@@ -6,4 +6,9 @@ export const routes: Routes = [
     path: '',
     component: HomeComponent,
   },
+  {
+    path: ':shortCode',
+    loadComponent: () =>
+      import('./redirect/redirect.component').then((m) => m.RedirectComponent),
+  },
 ];

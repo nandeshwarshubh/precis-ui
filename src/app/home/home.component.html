@@ -12,7 +12,7 @@
         >
           <span class="material-symbols-outlined text-2xl">content_cut</span>
         </div>
-        <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Precis</span>
+        <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">{{ messages.common.appName }}</span>
       </div>
     </div>
   </header>
@@ -27,10 +27,10 @@
         <h1
           class="mb-3 text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl"
         >
-          Precis
+          {{ messages.common.appName }}
         </h1>
         <p class="text-lg font-medium text-slate-600 dark:text-text-secondary sm:text-xl">
-          Short links. Nothing else.
+          {{ messages.landing.tagline }}
         </p>
       </div>
 
@@ -46,7 +46,7 @@
                 class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300"
                 for="long-url"
               >
-                Destination URL
+                {{ messages.landing.destinationUrlLabel }}
               </label>
               <div class="relative flex items-center">
                 <div
@@ -59,7 +59,7 @@
                   class="block w-full rounded-xl border-gray-300 bg-gray-50 py-4 pl-12 pr-4 text-base text-slate-900 placeholder-slate-400 focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/50 dark:border-border-dark dark:bg-[#10151a] dark:text-white dark:placeholder-slate-600 dark:focus:border-primary dark:focus:bg-[#161b22] transition-all"
                   id="long-url"
                   name="longUrl"
-                  placeholder="Paste your long link here..."
+                  [placeholder]="messages.landing.destinationUrlPlaceholder"
                   required
                   type="url"
                 />
@@ -74,23 +74,23 @@
                   class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300"
                   for="alias"
                 >
-                  Custom Alias
+                  {{ messages.landing.customAliasLabel }}
                   <span class="text-xs font-normal text-slate-500 dark:text-slate-600"
-                    >(Optional)</span
+                    >{{ messages.landing.customAliasOptional }}</span
                   >
                 </label>
                 <div class="relative flex rounded-xl shadow-sm">
                   <span
                     class="inline-flex items-center rounded-l-xl border border-r-0 border-gray-300 bg-gray-100 px-4 text-slate-500 dark:border-border-dark dark:bg-[#161b22] dark:text-slate-500"
                   >
-                    precis.link/
+                    {{ uiBaseUrlDisplay() }}/
                   </span>
                   <input
                     [(ngModel)]="alias"
                     class="block w-full min-w-0 flex-1 rounded-none rounded-r-xl border-gray-300 bg-gray-50 py-3.5 px-4 text-base text-slate-900 placeholder-slate-400 focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/50 dark:border-border-dark dark:bg-[#10151a] dark:text-white dark:placeholder-slate-600 dark:focus:border-primary dark:focus:bg-[#161b22] transition-all"
                     id="alias"
                     name="alias"
-                    placeholder="my-custom-url"
+                    [placeholder]="messages.landing.customAliasPlaceholder"
                     type="text"
                   />
                 </div>
@@ -103,7 +103,7 @@
                 type="submit"
               >
                 <span class="material-symbols-outlined text-[20px]">auto_fix_high</span>
-                @if (isSubmitting()) { Shortening... } @else { Shorten }
+                @if (isSubmitting()) { {{ messages.landing.shorteningButton }} } @else { {{ messages.landing.shortenButton }} }
               </button>
             </div>
           </form>
@@ -115,7 +115,7 @@
         >
           <div class="flex items-center justify-center gap-2 text-sm text-slate-500 dark:text-slate-500">
             <span class="material-symbols-outlined text-[18px]">info</span>
-            <span>Press enter or click shorten to generate your link</span>
+            <span>{{ messages.landing.helperText }}</span>
           </div>
         </div>
       </div>
@@ -124,11 +124,11 @@
       <div class="mt-12 flex flex-wrap justify-center gap-8 text-slate-400 dark:text-slate-600">
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined text-[20px]">bolt</span>
-          <span class="text-sm font-medium">Instant Redirects</span>
+          <span class="text-sm font-medium">{{ messages.landing.featureInstantRedirects }}</span>
         </div>
         <div class="flex items-center gap-2">
           <span class="material-symbols-outlined text-[20px]">lock</span>
-          <span class="text-sm font-medium">HTTPS Secure</span>
+          <span class="text-sm font-medium">{{ messages.landing.featureHttpsSecure }}</span>
         </div>
       </div>
     </div>
@@ -147,10 +147,10 @@
         <h1
           class="text-slate-900 dark:text-white text-3xl md:text-4xl font-bold tracking-tight leading-tight"
         >
-          Shortened successfully!
+          {{ messages.success.headline }}
         </h1>
         <p class="text-slate-600 dark:text-text-secondary text-base font-normal">
-          Your secure link is ready to share.
+          {{ messages.success.subheadline }}
         </p>
       </div>
 
@@ -168,22 +168,39 @@
             <div class="flex flex-col gap-2">
               <label
                 class="text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-text-secondary"
-                >Short Link</label
+                >{{ messages.success.shortLinkLabel }}</label
               >
               <div class="flex items-center gap-2">
                 <p class="text-primary text-2xl md:text-3xl font-bold leading-tight tracking-tight">
-                  precis.link/{{ shortUrl() }}
+                  {{ shortUrl() }}
                 </p>
               </div>
               <div class="flex items-center gap-2 mt-1 truncate max-w-full">
                 <span class="material-symbols-outlined text-sm text-slate-600 dark:text-text-secondary"
                   >link</span
                 >
-                <p
-                  class="text-slate-600 dark:text-text-secondary text-sm font-normal leading-normal truncate"
-                >
-                  Original: {{ longUrl() }}
-                </p>
+                <div class="relative group flex-1 min-w-0">
+                  <p
+                    class="text-slate-600 dark:text-text-secondary text-sm font-normal leading-normal truncate cursor-help"
+                    [title]="longUrl()"
+                  >
+                    {{ messages.success.originalLabel }}: {{ longUrl() }}
+                  </p>
+                  <!-- Popover tooltip -->
+                  <div
+                    class="absolute left-0 bottom-full mb-2 hidden group-hover:block z-50 w-max max-w-md"
+                  >
+                    <div
+                      class="bg-slate-900 dark:bg-slate-800 text-white text-xs rounded-lg px-3 py-2 shadow-lg border border-slate-700"
+                    >
+                      <p class="break-all">{{ longUrl() }}</p>
+                      <!-- Arrow -->
+                      <div
+                        class="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-slate-800"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="flex flex-wrap items-center gap-3">
@@ -192,19 +209,7 @@
                 class="flex-1 sm:flex-none min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-10 px-5 bg-primary hover:bg-blue-600 active:scale-95 transition-all text-white gap-2 text-sm font-bold shadow-lg shadow-primary/25 inline-flex"
               >
                 <span class="material-symbols-outlined text-[20px]">content_copy</span>
-                <span>Copy Link</span>
-              </button>
-              <button
-                class="size-10 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-[#283039] text-slate-900 dark:text-white hover:bg-gray-200 dark:hover:bg-[#323b46] transition-colors"
-                title="QR Code"
-              >
-                <span class="material-symbols-outlined text-[20px]">qr_code_2</span>
-              </button>
-              <button
-                class="size-10 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-[#283039] text-slate-900 dark:text-white hover:bg-gray-200 dark:hover:bg-[#323b46] transition-colors"
-                title="Share"
-              >
-                <span class="material-symbols-outlined text-[20px]">share</span>
+                <span>{{ messages.success.copyLinkButton }}</span>
               </button>
             </div>
           </div>
@@ -217,7 +222,7 @@
           class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/10 border border-success/20"
         >
           <span class="material-symbols-outlined text-sm text-success">check</span>
-          <p class="text-success text-xs font-semibold tracking-wide">Ready to paste</p>
+          <p class="text-success text-xs font-semibold tracking-wide">{{ messages.success.readyToPaste }}</p>
         </div>
       </div>
 
@@ -231,7 +236,7 @@
             class="material-symbols-outlined text-[20px] group-hover:rotate-90 transition-transform duration-300"
             >add</span
           >
-          <span>Shorten another link</span>
+          <span>{{ messages.success.shortenAnotherButton }}</span>
         </button>
       </div>
     </div>
@@ -244,7 +249,7 @@
       <h1
         class="text-slate-900 dark:text-white tracking-tight text-4xl md:text-5xl font-extrabold leading-tight text-center mb-8"
       >
-        Shorten your links <br class="hidden md:block" /> in a second.
+        {{ messages.error.headline }}
       </h1>
 
       <!-- Main Card Container -->
@@ -257,7 +262,7 @@
             <label
               class="text-slate-700 dark:text-slate-300 text-sm font-medium ml-1"
               for="url-input-error"
-              >Paste your long link</label
+              >{{ messages.error.pasteYourLongLink }}</label
             >
           </div>
 
@@ -304,53 +309,10 @@
               class="flex-1 h-12 rounded-xl bg-primary hover:bg-blue-600 text-white text-base font-bold shadow-lg shadow-blue-500/25 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               type="button"
             >
-              Shorten URL
+              {{ messages.error.shortenUrlButton }}
               <span class="material-symbols-outlined text-xl">arrow_forward</span>
             </button>
           </div>
-        </div>
-      </div>
-
-      <!-- Additional Info / Features Preview -->
-      <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 w-full px-4 md:px-0">
-        <div
-          class="flex flex-col items-center text-center gap-3 p-4 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-300"
-        >
-          <div
-            class="size-12 rounded-full bg-blue-100 dark:bg-blue-900/30 text-primary flex items-center justify-center mb-1"
-          >
-            <span class="material-symbols-outlined">bolt</span>
-          </div>
-          <h3 class="text-slate-900 dark:text-white font-bold text-lg">Lightning Fast</h3>
-          <p class="text-slate-500 dark:text-slate-400 text-sm">
-            Generate secure links instantly with our optimized infrastructure.
-          </p>
-        </div>
-        <div
-          class="flex flex-col items-center text-center gap-3 p-4 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-300"
-        >
-          <div
-            class="size-12 rounded-full bg-blue-100 dark:bg-blue-900/30 text-primary flex items-center justify-center mb-1"
-          >
-            <span class="material-symbols-outlined">analytics</span>
-          </div>
-          <h3 class="text-slate-900 dark:text-white font-bold text-lg">Detailed Analytics</h3>
-          <p class="text-slate-500 dark:text-slate-400 text-sm">
-            Track clicks, locations, and devices for every link you create.
-          </p>
-        </div>
-        <div
-          class="flex flex-col items-center text-center gap-3 p-4 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-300"
-        >
-          <div
-            class="size-12 rounded-full bg-blue-100 dark:bg-blue-900/30 text-primary flex items-center justify-center mb-1"
-          >
-            <span class="material-symbols-outlined">qr_code_2</span>
-          </div>
-          <h3 class="text-slate-900 dark:text-white font-bold text-lg">QR Codes</h3>
-          <p class="text-slate-500 dark:text-slate-400 text-sm">
-            Automatically generate QR codes for your shortened links.
-          </p>
         </div>
       </div>
     </div>
@@ -362,10 +324,10 @@
       <!-- Headline -->
       <div class="text-center space-y-2">
         <h1 class="text-slate-900 dark:text-white text-4xl md:text-5xl font-bold tracking-tight">
-          Shorten your link.
+          {{ messages.conflict.headline }}
         </h1>
         <p class="text-slate-500 dark:text-text-secondary text-lg">
-          Create short, powerful links in seconds.
+          {{ messages.conflict.subheadline }}
         </p>
       </div>
 
@@ -379,7 +341,7 @@
             class="text-slate-900 dark:text-white text-sm font-medium leading-normal flex items-center gap-2"
           >
             <span class="material-symbols-outlined text-slate-400 text-lg">public</span>
-            Destination URL
+            {{ messages.conflict.destinationUrlLabel }}
           </label>
           <div class="relative group">
             <input
@@ -401,13 +363,13 @@
             class="text-slate-900 dark:text-white text-sm font-medium leading-normal flex items-center gap-2"
           >
             <span class="material-symbols-outlined text-slate-400 text-lg">edit</span>
-            Custom Alias
+            {{ messages.conflict.customAliasLabel }}
           </label>
           <div class="flex flex-col md:flex-row gap-4">
             <!-- Input Field wrapper -->
             <div class="flex-1 relative">
               <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
-                <span class="text-slate-400 dark:text-text-secondary">precis.link/</span>
+                <span class="text-slate-400 dark:text-text-secondary">{{ uiBaseUrlDisplay() }}/</span>
               </div>
               <input
                 [(ngModel)]="alias"
@@ -425,7 +387,7 @@
               [disabled]="!canSubmit()"
               class="h-[58px] bg-primary hover:bg-blue-600 text-white font-bold rounded-lg px-8 transition-colors shadow-lg shadow-primary/20 flex items-center justify-center gap-2 whitespace-nowrap disabled:opacity-75 disabled:cursor-not-allowed"
             >
-              <span>Shorten</span>
+              <span>{{ messages.conflict.shortenButton }}</span>
               <span class="material-symbols-outlined text-lg">arrow_forward</span>
             </button>
           </div>
@@ -436,7 +398,7 @@
               <span>{{ errorMessage() }}</span>
             </div>
             <div class="flex flex-wrap items-center gap-2">
-              <span class="text-slate-500 dark:text-text-secondary text-sm">Try one of these:</span>
+              <span class="text-slate-500 dark:text-text-secondary text-sm">{{ messages.conflict.tryOneOfThese }}</span>
               @for (suggestion of conflictSuggestions(); track suggestion) {
               <button
                 (click)="onSuggestionClick(suggestion)"
@@ -464,12 +426,12 @@
     <div
       class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8"
     >
-      <p class="text-sm text-slate-500 dark:text-slate-400">© 2026 Precis</p>
+      <p class="text-sm text-slate-500 dark:text-slate-400">{{ messages.common.copyright }}</p>
       <div class="flex gap-6">
         <a
           class="text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
           href="https://shubhamnandeshwar.netlify.app/contact"
-          >Contact</a
+          >{{ messages.navigation.contactLink }}</a
         >
       </div>
     </div>
