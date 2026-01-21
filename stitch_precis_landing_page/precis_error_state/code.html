@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Precis - URL Shortener Error State</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d7ff2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white antialiased overflow-x-hidden transition-colors duration-300">
+<div class="relative flex min-h-screen w-full flex-col">
+<!-- Background decorative elements for minimalist feel -->
+<div class="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-primary/5 to-transparent pointer-events-none opacity-50"></div>
+<div class="layout-container flex h-full grow flex-col relative z-10">
+<!-- Navbar -->
+<div class="w-full flex justify-center border-b border-slate-200 dark:border-slate-800 bg-white/50 dark:bg-[#101922]/80 backdrop-blur-sm sticky top-0 z-50">
+<div class="w-full max-w-[1200px] px-6 py-4 flex items-center justify-between">
+<div class="flex items-center gap-3 text-slate-900 dark:text-white cursor-pointer group">
+<div class="size-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all duration-300">
+<span class="material-symbols-outlined text-xl">link</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">Precis</h2>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center justify-center rounded-lg h-9 px-4 text-slate-600 dark:text-slate-400 text-sm font-semibold hover:text-slate-900 dark:hover:text-white transition-colors">
+                            History
+                        </button>
+<button class="flex items-center justify-center overflow-hidden rounded-lg h-9 px-4 bg-primary hover:bg-blue-600 text-white text-sm font-bold shadow-lg shadow-blue-500/20 transition-all duration-300">
+<span class="truncate">Login</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Main Content Area -->
+<div class="flex flex-1 flex-col items-center justify-center px-4 py-12 md:py-24">
+<div class="w-full max-w-[640px] flex flex-col items-center animate-fade-in-up">
+<!-- Headline -->
+<h1 class="text-slate-900 dark:text-white tracking-tight text-4xl md:text-5xl font-extrabold leading-tight text-center mb-8 drop-shadow-sm">
+                        Shorten your links <br class="hidden md:block"/> in a second.
+                    </h1>
+<!-- Main Card Container -->
+<div class="w-full bg-white dark:bg-[#182430] rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 p-2 md:p-3">
+<div class="flex flex-col gap-4 p-4 md:p-6">
+<!-- Input Label -->
+<div class="flex justify-between items-center">
+<label class="text-slate-700 dark:text-slate-300 text-sm font-medium ml-1" for="url-input">Paste your long link</label>
+</div>
+<!-- Input Group -->
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+<span class="material-symbols-outlined text-red-500/80 dark:text-red-400/80">link_off</span>
+</div>
+<input aria-describedby="url-error" aria-invalid="true" class="w-full h-14 pl-12 pr-4 rounded-xl bg-red-50 dark:bg-red-500/5 border-2 border-red-500/50 dark:border-red-500/40 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-red-500/10 focus:border-red-500 transition-all duration-200 text-base font-normal shadow-sm" id="url-input" type="text" value="htps://google"/>
+<!-- Clear button inside input -->
+<button class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+<span class="material-symbols-outlined text-xl">close</span>
+</button>
+</div>
+<!-- Error Message -->
+<div class="flex items-start gap-2 px-1 animate-pulse" id="url-error" role="alert">
+<span class="material-symbols-outlined text-red-500 dark:text-red-400 text-lg mt-0.5">error</span>
+<p class="text-red-600 dark:text-red-400 text-sm font-medium leading-relaxed">
+                                    Invalid URL format. Please ensure your link starts with http:// or https://.
+                                </p>
+</div>
+<!-- Action Area -->
+<div class="pt-2 flex flex-col sm:flex-row gap-3">
+<button class="flex-1 h-12 rounded-xl bg-primary hover:bg-blue-600 text-white text-base font-bold shadow-lg shadow-blue-500/25 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
+                                    Shorten URL
+                                    <span class="material-symbols-outlined text-xl">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Additional Info / Features Preview -->
+<div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 w-full px-4 md:px-0">
+<div class="flex flex-col items-center text-center gap-3 p-4 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-300">
+<div class="size-12 rounded-full bg-blue-100 dark:bg-blue-900/30 text-primary flex items-center justify-center mb-1">
+<span class="material-symbols-outlined">bolt</span>
+</div>
+<h3 class="text-slate-900 dark:text-white font-bold text-lg">Lightning Fast</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Generate secure links instantly with our optimized infrastructure.</p>
+</div>
+<div class="flex flex-col items-center text-center gap-3 p-4 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-300">
+<div class="size-12 rounded-full bg-blue-100 dark:bg-blue-900/30 text-primary flex items-center justify-center mb-1">
+<span class="material-symbols-outlined">analytics</span>
+</div>
+<h3 class="text-slate-900 dark:text-white font-bold text-lg">Detailed Analytics</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Track clicks, locations, and devices for every link you create.</p>
+</div>
+<div class="flex flex-col items-center text-center gap-3 p-4 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-300">
+<div class="size-12 rounded-full bg-blue-100 dark:bg-blue-900/30 text-primary flex items-center justify-center mb-1">
+<span class="material-symbols-outlined">qr_code_2</span>
+</div>
+<h3 class="text-slate-900 dark:text-white font-bold text-lg">QR Codes</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Automatically generate QR codes for your shortened links.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="w-full border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-[#101922] py-8">
+<div class="max-w-[1200px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+<p>© 2024 Precis. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="hover:text-primary transition-colors" href="#">Privacy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms</a>
+<a class="hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+</div>
+</footer>
+</div>
+</div>
+</body></html>

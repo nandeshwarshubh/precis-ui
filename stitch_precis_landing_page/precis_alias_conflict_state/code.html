@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Precis - Alias Conflict</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d7ff2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<!-- Header -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-gray-200 dark:border-[#283039] px-6 py-4 md:px-10">
+<div class="flex items-center gap-3">
+<div class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/20 text-primary">
+<span class="material-symbols-outlined">link</span>
+</div>
+<h2 class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Precis</h2>
+</div>
+<button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-gray-200 dark:bg-[#283039] hover:bg-gray-300 dark:hover:bg-[#3b4754] text-gray-900 dark:text-white px-5 py-2 text-sm font-bold transition-colors">
+<span class="truncate">Log In</span>
+</button>
+</header>
+<!-- Main Content -->
+<main class="flex flex-1 flex-col items-center justify-center px-4 py-10 md:px-10">
+<div class="w-full max-w-[640px] flex flex-col gap-8">
+<!-- Headline -->
+<div class="text-center space-y-2">
+<h1 class="text-gray-900 dark:text-white text-4xl md:text-5xl font-bold tracking-tight">Shorten your link.</h1>
+<p class="text-gray-500 dark:text-[#9cabba] text-lg">Create short, powerful links in seconds.</p>
+</div>
+<!-- Form Container -->
+<div class="flex flex-col gap-6 rounded-2xl bg-white dark:bg-[#1b2127] p-6 shadow-sm border border-gray-200 dark:border-[#283039]">
+<!-- Destination URL Input -->
+<div class="flex flex-col gap-2">
+<label class="text-gray-900 dark:text-white text-sm font-medium leading-normal flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400 text-lg">public</span>
+                            Destination URL
+                        </label>
+<div class="relative group">
+<input class="w-full rounded-lg border border-gray-300 dark:border-[#3b4754] bg-gray-50 dark:bg-[#283039] p-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-[#9cabba] focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none text-base transition-all" type="text" value="https://www.very-long-website.com/campaign/summer-2024"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-xl">check_circle</span>
+</div>
+</div>
+</div>
+<!-- Alias Input Group with Error State -->
+<div class="flex flex-col gap-2">
+<label class="text-gray-900 dark:text-white text-sm font-medium leading-normal flex items-center gap-2">
+<span class="material-symbols-outlined text-gray-400 text-lg">edit</span>
+                            Custom Alias
+                        </label>
+<div class="flex flex-col md:flex-row gap-4">
+<!-- Input Field wrapper -->
+<div class="flex-1 relative">
+<div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+<span class="text-gray-400 dark:text-[#9cabba]">precis.io/</span>
+</div>
+<input class="w-full rounded-lg border border-red-500 bg-red-50 dark:bg-[#281a1a] dark:border-red-500/50 p-4 pl-24 text-gray-900 dark:text-white focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none text-base transition-colors" type="text" value="summer"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 text-red-500">
+<span class="material-symbols-outlined text-xl">error</span>
+</div>
+</div>
+<!-- Action Button -->
+<button class="h-[58px] bg-primary hover:bg-blue-600 text-white font-bold rounded-lg px-8 transition-colors shadow-lg shadow-primary/20 flex items-center justify-center gap-2 whitespace-nowrap opacity-75 cursor-not-allowed">
+<span>Shorten</span>
+<span class="material-symbols-outlined text-lg">arrow_forward</span>
+</button>
+</div>
+<!-- Error Message & Suggestions -->
+<div class="mt-2 animate-in fade-in slide-in-from-top-2 duration-300">
+<div class="flex items-start gap-2 text-red-600 dark:text-red-400 text-sm font-medium mb-3">
+<span>The alias 'summer' is already taken.</span>
+</div>
+<div class="flex flex-wrap items-center gap-2">
+<span class="text-gray-500 dark:text-[#9cabba] text-sm">Try one of these:</span>
+<button class="group flex items-center gap-1 rounded-full border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-medium text-red-700 transition-colors hover:bg-red-100 hover:border-red-300 dark:border-red-900/30 dark:bg-red-900/20 dark:text-red-300 dark:hover:bg-red-900/40">
+<span>summer-24</span>
+<span class="material-symbols-outlined text-[16px] opacity-50 group-hover:opacity-100">add</span>
+</button>
+<button class="group flex items-center gap-1 rounded-full border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-medium text-red-700 transition-colors hover:bg-red-100 hover:border-red-300 dark:border-red-900/30 dark:bg-red-900/20 dark:text-red-300 dark:hover:bg-red-900/40">
+<span>summer-v2</span>
+<span class="material-symbols-outlined text-[16px] opacity-50 group-hover:opacity-100">add</span>
+</button>
+<button class="group flex items-center gap-1 rounded-full border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-medium text-red-700 transition-colors hover:bg-red-100 hover:border-red-300 dark:border-red-900/30 dark:bg-red-900/20 dark:text-red-300 dark:hover:bg-red-900/40">
+<span>get-summer</span>
+<span class="material-symbols-outlined text-[16px] opacity-50 group-hover:opacity-100">add</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Links (Contextual Footer) -->
+<div class="flex flex-col gap-4 pt-8 border-t border-gray-200 dark:border-[#283039]">
+<h3 class="text-gray-500 dark:text-[#9cabba] text-sm font-semibold uppercase tracking-wider pl-1">Recent Links</h3>
+<div class="flex items-center justify-between rounded-lg bg-gray-50 dark:bg-[#1b2127] p-4 border border-transparent hover:border-gray-200 dark:hover:border-[#3b4754] transition-colors group">
+<div class="flex flex-col gap-1 overflow-hidden">
+<div class="flex items-center gap-2">
+<span class="text-gray-900 dark:text-white font-medium truncate">precis.io/spring-promo</span>
+<span class="flex items-center justify-center rounded bg-green-500/10 px-1.5 py-0.5 text-xs font-medium text-green-500">Active</span>
+</div>
+<span class="text-gray-500 dark:text-[#9cabba] text-sm truncate">google.com/search?q=spring+collection+2023...</span>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" title="Copy">
+<span class="material-symbols-outlined text-xl">content_copy</span>
+</button>
+<button class="p-2 text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors" title="Stats">
+<span class="material-symbols-outlined text-xl">bar_chart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

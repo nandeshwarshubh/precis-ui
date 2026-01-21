@@ -1,3 +1,6 @@
 export const environment = {
-  production: true
+  production: true,
+  apiBaseUrl: 'http://localhost:8080/app/rest',
+  uiBaseUrl: 'http://localhost:4200',
 };
+

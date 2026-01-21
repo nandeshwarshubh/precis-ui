@@ -1,0 +1,439 @@
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+  <!-- Navigation -->
+  <header
+    class="w-full border-b border-gray-200 dark:border-[#283039]/50 backdrop-blur-md bg-white/50 dark:bg-background-dark/80 sticky top-0 z-50"
+  >
+    <div
+      class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8"
+    >
+      <div class="flex items-center gap-2 text-white">
+        <div
+          class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/20 text-primary"
+        >
+          <span class="material-symbols-outlined text-2xl">content_cut</span>
+        </div>
+        <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">{{ messages.common.appName }}</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex flex-1 flex-col items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
+    <!-- LANDING STATE -->
+    @if (uiState() === 'landing') {
+    <div class="w-full max-w-2xl animate-fade-in">
+      <!-- Hero Text -->
+      <div class="mb-10 text-center">
+        <h1
+          class="mb-3 text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl"
+        >
+          {{ messages.common.appName }}
+        </h1>
+        <p class="text-lg font-medium text-slate-600 dark:text-text-secondary sm:text-xl">
+          {{ messages.landing.tagline }}
+        </p>
+      </div>
+
+      <!-- Input Card -->
+      <div
+        class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl dark:border-border-dark dark:bg-surface-dark/50 dark:backdrop-blur-sm dark:shadow-glow"
+      >
+        <div class="p-6 sm:p-8">
+          <form (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
+            <!-- Long URL Input -->
+            <div class="group relative">
+              <label
+                class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300"
+                for="long-url"
+              >
+                {{ messages.landing.destinationUrlLabel }}
+              </label>
+              <div class="relative flex items-center">
+                <div
+                  class="pointer-events-none absolute left-0 flex h-full w-12 items-center justify-center text-slate-400 dark:text-slate-500"
+                >
+                  <span class="material-symbols-outlined">link</span>
+                </div>
+                <input
+                  [(ngModel)]="longUrl"
+                  class="block w-full rounded-xl border-gray-300 bg-gray-50 py-4 pl-12 pr-4 text-base text-slate-900 placeholder-slate-400 focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/50 dark:border-border-dark dark:bg-[#10151a] dark:text-white dark:placeholder-slate-600 dark:focus:border-primary dark:focus:bg-[#161b22] transition-all"
+                  id="long-url"
+                  name="longUrl"
+                  [placeholder]="messages.landing.destinationUrlPlaceholder"
+                  required
+                  type="url"
+                />
+              </div>
+            </div>
+
+            <!-- Alias & Button Row -->
+            <div class="flex flex-col gap-4 sm:flex-row sm:items-end">
+              <!-- Alias Input -->
+              <div class="flex-1">
+                <label
+                  class="mb-2 block text-sm font-semibold text-slate-700 dark:text-slate-300"
+                  for="alias"
+                >
+                  {{ messages.landing.customAliasLabel }}
+                  <span class="text-xs font-normal text-slate-500 dark:text-slate-600"
+                    >{{ messages.landing.customAliasOptional }}</span
+                  >
+                </label>
+                <div class="relative flex rounded-xl shadow-sm">
+                  <span
+                    class="inline-flex items-center rounded-l-xl border border-r-0 border-gray-300 bg-gray-100 px-4 text-slate-500 dark:border-border-dark dark:bg-[#161b22] dark:text-slate-500"
+                  >
+                    {{ uiBaseUrlDisplay() }}/
+                  </span>
+                  <input
+                    [(ngModel)]="alias"
+                    class="block w-full min-w-0 flex-1 rounded-none rounded-r-xl border-gray-300 bg-gray-50 py-3.5 px-4 text-base text-slate-900 placeholder-slate-400 focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/50 dark:border-border-dark dark:bg-[#10151a] dark:text-white dark:placeholder-slate-600 dark:focus:border-primary dark:focus:bg-[#161b22] transition-all"
+                    id="alias"
+                    name="alias"
+                    [placeholder]="messages.landing.customAliasPlaceholder"
+                    type="text"
+                  />
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <button
+                [disabled]="!canSubmit()"
+                class="inline-flex h-[52px] items-center justify-center gap-2 rounded-xl bg-primary px-8 text-base font-bold text-white shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5 hover:bg-blue-600 hover:shadow-primary/40 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-surface-dark sm:w-auto w-full disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                type="submit"
+              >
+                <span class="material-symbols-outlined text-[20px]">auto_fix_high</span>
+                @if (isSubmitting()) { {{ messages.landing.shorteningButton }} } @else { {{ messages.landing.shortenButton }} }
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Result Area Placeholder -->
+        <div
+          class="border-t border-gray-100 bg-gray-50/50 px-6 py-4 dark:border-border-dark dark:bg-[#161b22]/50"
+        >
+          <div class="flex items-center justify-center gap-2 text-sm text-slate-500 dark:text-slate-500">
+            <span class="material-symbols-outlined text-[18px]">info</span>
+            <span>{{ messages.landing.helperText }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Features -->
+      <div class="mt-12 flex flex-wrap justify-center gap-8 text-slate-400 dark:text-slate-600">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[20px]">bolt</span>
+          <span class="text-sm font-medium">{{ messages.landing.featureInstantRedirects }}</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[20px]">lock</span>
+          <span class="text-sm font-medium">{{ messages.landing.featureHttpsSecure }}</span>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- SUCCESS STATE -->
+    @if (uiState() === 'success') {
+    <div class="w-full max-w-[720px] flex flex-col gap-6 animate-fade-in">
+      <!-- Success Headline -->
+      <div class="flex flex-col items-center justify-center gap-2 text-center">
+        <div
+          class="inline-flex items-center justify-center rounded-full bg-success/10 p-2 text-success mb-2"
+        >
+          <span class="material-symbols-outlined text-[28px]">check_circle</span>
+        </div>
+        <h1
+          class="text-slate-900 dark:text-white text-3xl md:text-4xl font-bold tracking-tight leading-tight"
+        >
+          {{ messages.success.headline }}
+        </h1>
+        <p class="text-slate-600 dark:text-text-secondary text-base font-normal">
+          {{ messages.success.subheadline }}
+        </p>
+      </div>
+
+      <!-- Result Card -->
+      <div class="relative group">
+        <!-- Glow effect background -->
+        <div
+          class="absolute -inset-0.5 bg-gradient-to-r from-success/20 to-primary/20 rounded-xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"
+        ></div>
+        <div
+          class="relative flex flex-col sm:flex-row items-stretch gap-6 rounded-xl bg-white dark:bg-surface-dark p-5 shadow-xl border border-gray-200 dark:border-border-dark"
+        >
+          <!-- Link Info -->
+          <div class="flex flex-[3_3_0px] flex-col justify-center gap-5">
+            <div class="flex flex-col gap-2">
+              <label
+                class="text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-text-secondary"
+                >{{ messages.success.shortLinkLabel }}</label
+              >
+              <div class="flex items-center gap-2">
+                <p class="text-primary text-2xl md:text-3xl font-bold leading-tight tracking-tight">
+                  {{ shortUrl() }}
+                </p>
+              </div>
+              <div class="flex items-center gap-2 mt-1 truncate max-w-full">
+                <span class="material-symbols-outlined text-sm text-slate-600 dark:text-text-secondary"
+                  >link</span
+                >
+                <div class="relative group flex-1 min-w-0">
+                  <p
+                    class="text-slate-600 dark:text-text-secondary text-sm font-normal leading-normal truncate cursor-help"
+                    [title]="longUrl()"
+                  >
+                    {{ messages.success.originalLabel }}: {{ longUrl() }}
+                  </p>
+                  <!-- Popover tooltip -->
+                  <div
+                    class="absolute left-0 bottom-full mb-2 hidden group-hover:block z-50 w-max max-w-md"
+                  >
+                    <div
+                      class="bg-slate-900 dark:bg-slate-800 text-white text-xs rounded-lg px-3 py-2 shadow-lg border border-slate-700"
+                    >
+                      <p class="break-all">{{ longUrl() }}</p>
+                      <!-- Arrow -->
+                      <div
+                        class="absolute top-full left-4 w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-slate-900 dark:border-t-slate-800"
+                      ></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+              <button
+                (click)="onCopyLink()"
+                class="flex-1 sm:flex-none min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-10 px-5 bg-primary hover:bg-blue-600 active:scale-95 transition-all text-white gap-2 text-sm font-bold shadow-lg shadow-primary/25 inline-flex"
+              >
+                <span class="material-symbols-outlined text-[20px]">content_copy</span>
+                <span>{{ messages.success.copyLinkButton }}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Toast/Feedback -->
+      <div class="flex justify-center animate-fade-in-delayed">
+        <div
+          class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/10 border border-success/20"
+        >
+          <span class="material-symbols-outlined text-sm text-success">check</span>
+          <p class="text-success text-xs font-semibold tracking-wide">{{ messages.success.readyToPaste }}</p>
+        </div>
+      </div>
+
+      <!-- Secondary Action -->
+      <div class="flex justify-center pt-2">
+        <button
+          (click)="onShortenAnother()"
+          class="group flex cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-transparent hover:bg-gray-100 dark:hover:bg-[#283039] text-slate-600 dark:text-text-secondary dark:hover:text-white gap-2 text-sm font-medium transition-colors"
+        >
+          <span
+            class="material-symbols-outlined text-[20px] group-hover:rotate-90 transition-transform duration-300"
+            >add</span
+          >
+          <span>{{ messages.success.shortenAnotherButton }}</span>
+        </button>
+      </div>
+    </div>
+    }
+
+    <!-- ERROR STATE -->
+    @if (uiState() === 'error') {
+    <div class="w-full max-w-[640px] flex flex-col items-center animate-fade-in">
+      <!-- Headline -->
+      <h1
+        class="text-slate-900 dark:text-white tracking-tight text-4xl md:text-5xl font-extrabold leading-tight text-center mb-8"
+      >
+        {{ messages.error.headline }}
+      </h1>
+
+      <!-- Main Card Container -->
+      <div
+        class="w-full bg-white dark:bg-[#182430] rounded-2xl shadow-xl border border-gray-200 dark:border-slate-700 p-2 md:p-3"
+      >
+        <div class="flex flex-col gap-4 p-4 md:p-6">
+          <!-- Input Label -->
+          <div class="flex justify-between items-center">
+            <label
+              class="text-slate-700 dark:text-slate-300 text-sm font-medium ml-1"
+              for="url-input-error"
+              >{{ messages.error.pasteYourLongLink }}</label
+            >
+          </div>
+
+          <!-- Input Group -->
+          <div class="relative group">
+            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+              <span class="material-symbols-outlined text-red-500/80 dark:text-red-400/80"
+                >link_off</span
+              >
+            </div>
+            <input
+              [(ngModel)]="longUrl"
+              aria-describedby="url-error"
+              aria-invalid="true"
+              class="w-full h-14 pl-12 pr-12 rounded-xl bg-red-50 dark:bg-red-500/5 border-2 border-red-500/50 dark:border-red-500/40 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-red-500/10 focus:border-red-500 transition-all duration-200 text-base font-normal shadow-sm"
+              id="url-input-error"
+              type="text"
+            />
+            <!-- Clear button inside input -->
+            <button
+              (click)="onClearInput()"
+              class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+              type="button"
+            >
+              <span class="material-symbols-outlined text-xl">close</span>
+            </button>
+          </div>
+
+          <!-- Error Message -->
+          <div class="flex items-start gap-2 px-1 animate-pulse" id="url-error" role="alert">
+            <span class="material-symbols-outlined text-red-500 dark:text-red-400 text-lg mt-0.5"
+              >error</span
+            >
+            <p class="text-red-600 dark:text-red-400 text-sm font-medium leading-relaxed">
+              {{ errorMessage() }}
+            </p>
+          </div>
+
+          <!-- Action Area -->
+          <div class="pt-2 flex flex-col sm:flex-row gap-3">
+            <button
+              (click)="onSubmit()"
+              [disabled]="!canSubmit()"
+              class="flex-1 h-12 rounded-xl bg-primary hover:bg-blue-600 text-white text-base font-bold shadow-lg shadow-blue-500/25 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              type="button"
+            >
+              {{ messages.error.shortenUrlButton }}
+              <span class="material-symbols-outlined text-xl">arrow_forward</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+
+    <!-- CONFLICT STATE -->
+    @if (uiState() === 'conflict') {
+    <div class="w-full max-w-[640px] flex flex-col gap-8 animate-fade-in">
+      <!-- Headline -->
+      <div class="text-center space-y-2">
+        <h1 class="text-slate-900 dark:text-white text-4xl md:text-5xl font-bold tracking-tight">
+          {{ messages.conflict.headline }}
+        </h1>
+        <p class="text-slate-500 dark:text-text-secondary text-lg">
+          {{ messages.conflict.subheadline }}
+        </p>
+      </div>
+
+      <!-- Form Container -->
+      <div
+        class="flex flex-col gap-6 rounded-2xl bg-white dark:bg-surface-dark p-6 shadow-sm border border-gray-200 dark:border-border-dark"
+      >
+        <!-- Destination URL Input -->
+        <div class="flex flex-col gap-2">
+          <label
+            class="text-slate-900 dark:text-white text-sm font-medium leading-normal flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined text-slate-400 text-lg">public</span>
+            {{ messages.conflict.destinationUrlLabel }}
+          </label>
+          <div class="relative group">
+            <input
+              [(ngModel)]="longUrl"
+              class="w-full rounded-lg border border-gray-300 dark:border-border-dark bg-gray-50 dark:bg-[#283039] p-4 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-text-secondary focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none text-base transition-all"
+              type="text"
+            />
+            <div
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-primary opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <span class="material-symbols-outlined text-xl">check_circle</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alias Input Group with Error State -->
+        <div class="flex flex-col gap-2">
+          <label
+            class="text-slate-900 dark:text-white text-sm font-medium leading-normal flex items-center gap-2"
+          >
+            <span class="material-symbols-outlined text-slate-400 text-lg">edit</span>
+            {{ messages.conflict.customAliasLabel }}
+          </label>
+          <div class="flex flex-col md:flex-row gap-4">
+            <!-- Input Field wrapper -->
+            <div class="flex-1 relative">
+              <div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none">
+                <span class="text-slate-400 dark:text-text-secondary">{{ uiBaseUrlDisplay() }}/</span>
+              </div>
+              <input
+                [(ngModel)]="alias"
+                class="w-full rounded-lg border border-red-500 bg-red-50 dark:bg-[#281a1a] dark:border-red-500/50 p-4 pl-24 text-slate-900 dark:text-white focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none text-base transition-colors"
+                type="text"
+              />
+              <div class="absolute right-4 top-1/2 -translate-y-1/2 text-red-500">
+                <span class="material-symbols-outlined text-xl">error</span>
+              </div>
+            </div>
+
+            <!-- Action Button -->
+            <button
+              (click)="onSubmit()"
+              [disabled]="!canSubmit()"
+              class="h-[58px] bg-primary hover:bg-blue-600 text-white font-bold rounded-lg px-8 transition-colors shadow-lg shadow-primary/20 flex items-center justify-center gap-2 whitespace-nowrap disabled:opacity-75 disabled:cursor-not-allowed"
+            >
+              <span>{{ messages.conflict.shortenButton }}</span>
+              <span class="material-symbols-outlined text-lg">arrow_forward</span>
+            </button>
+          </div>
+
+          <!-- Error Message & Suggestions -->
+          <div class="mt-2 animate-fade-in">
+            <div class="flex items-start gap-2 text-red-600 dark:text-red-400 text-sm font-medium mb-3">
+              <span>{{ errorMessage() }}</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-slate-500 dark:text-text-secondary text-sm">{{ messages.conflict.tryOneOfThese }}</span>
+              @for (suggestion of conflictSuggestions(); track suggestion) {
+              <button
+                (click)="onSuggestionClick(suggestion)"
+                class="group flex items-center gap-1 rounded-full border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-medium text-red-700 transition-colors hover:bg-red-100 hover:border-red-300 dark:border-red-900/30 dark:bg-red-900/20 dark:text-red-300 dark:hover:bg-red-900/40"
+                type="button"
+              >
+                <span>{{ suggestion }}</span>
+                <span class="material-symbols-outlined text-[16px] opacity-50 group-hover:opacity-100"
+                  >add</span
+                >
+              </button>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    }
+  </main>
+
+  <!-- Footer -->
+  <footer
+    class="w-full border-t border-gray-200 dark:border-[#283039] bg-white dark:bg-background-dark py-6"
+  >
+    <div
+      class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8"
+    >
+      <p class="text-sm text-slate-500 dark:text-slate-400">{{ messages.common.copyright }}</p>
+      <div class="flex gap-6">
+        <a
+          class="text-sm text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+          href="https://shubhamnandeshwar.netlify.app/contact"
+          >{{ messages.navigation.contactLink }}</a
+        >
+      </div>
+    </div>
+  </footer>
+</div>
