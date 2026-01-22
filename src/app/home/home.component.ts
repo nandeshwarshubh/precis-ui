@@ -2,7 +2,6 @@ import { Component, signal, computed, inject, PLATFORM_ID } from '@angular/core'
 import { isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UrlShortenerService } from '../services/url-shortener.service';
-import { UrlValidators } from '../utils/validators';
 import { UiState, ApiErrorResponse, UrlUtils } from '../models/api.models';
 import { environment } from '../../environments/environment';
 import { MESSAGES } from '../i18n';
@@ -17,8 +16,9 @@ export class HomeComponent {
   private readonly urlShortenerService = inject(UrlShortenerService);
   private readonly platformId = inject(PLATFORM_ID);
 
-  protected readonly longUrl = signal('');
-  protected readonly alias = signal('');
+  // Writable signals for form fields - works with ngModel in SSR
+  protected longUrl = signal('');
+  protected alias = signal('');
   protected readonly shortUrl = signal('');
   protected readonly errorMessage = signal('');
   protected readonly conflictSuggestions = signal<string[]>([]);
@@ -34,24 +34,9 @@ export class HomeComponent {
     return url.replace(/^https?:\/\//, '');
   });
 
-  protected readonly urlError = computed(() => {
-    const url = this.longUrl();
-    if (!url) return '';
-    return UrlValidators.getUrlErrorMessage(url);
-  });
-
-  protected readonly aliasError = computed(() => {
-    const aliasValue = this.alias();
-    if (!aliasValue) return '';
-    return UrlValidators.getCustomAliasErrorMessage(aliasValue);
-  });
-
-  protected readonly isFormValid = computed(() => {
-    return this.longUrl().trim().length > 0 && !this.urlError() && !this.aliasError();
-  });
-
   protected readonly canSubmit = computed(() => {
-    return this.isFormValid() && !this.isSubmitting();
+    // No validation - button is always enabled except when submitting
+    return !this.isSubmitting();
   });
 
   onSubmit(): void {

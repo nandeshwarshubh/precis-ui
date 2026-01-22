@@ -39,7 +39,7 @@
         class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl dark:border-border-dark dark:bg-surface-dark/50 dark:backdrop-blur-sm dark:shadow-glow"
       >
         <div class="p-6 sm:p-8">
-          <form (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
+          <form #urlForm="ngForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
             <!-- Long URL Input -->
             <div class="group relative">
               <label
@@ -55,7 +55,8 @@
                   <span class="material-symbols-outlined">link</span>
                 </div>
                 <input
-                  [(ngModel)]="longUrl"
+                  [ngModel]="longUrl()"
+                  (ngModelChange)="longUrl.set($event)"
                   class="block w-full rounded-xl border-gray-300 bg-gray-50 py-4 pl-12 pr-4 text-base text-slate-900 placeholder-slate-400 focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/50 dark:border-border-dark dark:bg-[#10151a] dark:text-white dark:placeholder-slate-600 dark:focus:border-primary dark:focus:bg-[#161b22] transition-all"
                   id="long-url"
                   name="longUrl"
@@ -86,7 +87,8 @@
                     {{ uiBaseUrlDisplay() }}/
                   </span>
                   <input
-                    [(ngModel)]="alias"
+                    [ngModel]="alias()"
+                    (ngModelChange)="alias.set($event)"
                     class="block w-full min-w-0 flex-1 rounded-none rounded-r-xl border-gray-300 bg-gray-50 py-3.5 px-4 text-base text-slate-900 placeholder-slate-400 focus:border-primary focus:bg-white focus:ring-2 focus:ring-primary/50 dark:border-border-dark dark:bg-[#10151a] dark:text-white dark:placeholder-slate-600 dark:focus:border-primary dark:focus:bg-[#161b22] transition-all"
                     id="alias"
                     name="alias"
@@ -274,7 +276,8 @@
               >
             </div>
             <input
-              [(ngModel)]="longUrl"
+              [ngModel]="longUrl()"
+              (ngModelChange)="longUrl.set($event)"
               aria-describedby="url-error"
               aria-invalid="true"
               class="w-full h-14 pl-12 pr-12 rounded-xl bg-red-50 dark:bg-red-500/5 border-2 border-red-500/50 dark:border-red-500/40 text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-4 focus:ring-red-500/10 focus:border-red-500 transition-all duration-200 text-base font-normal shadow-sm"
@@ -345,7 +348,8 @@
           </label>
           <div class="relative group">
             <input
-              [(ngModel)]="longUrl"
+              [ngModel]="longUrl()"
+              (ngModelChange)="longUrl.set($event)"
               class="w-full rounded-lg border border-gray-300 dark:border-border-dark bg-gray-50 dark:bg-[#283039] p-4 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-text-secondary focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none text-base transition-all"
               type="text"
             />
@@ -372,7 +376,8 @@
                 <span class="text-slate-400 dark:text-text-secondary">{{ uiBaseUrlDisplay() }}/</span>
               </div>
               <input
-                [(ngModel)]="alias"
+                [ngModel]="alias()"
+                (ngModelChange)="alias.set($event)"
                 class="w-full rounded-lg border border-red-500 bg-red-50 dark:bg-[#281a1a] dark:border-red-500/50 p-4 pl-24 text-slate-900 dark:text-white focus:border-red-500 focus:ring-1 focus:ring-red-500 focus:outline-none text-base transition-colors"
                 type="text"
               />
