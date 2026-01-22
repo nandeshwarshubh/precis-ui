@@ -1,15 +1,16 @@
 {
   "version": 2,
-  "builds": [
+  "public": true,
+  "name": "precis-ui",
+  "rewrites": [
     {
-      "src": "dist/precis-ui/server/server.mjs",
-      "use": "@vercel/node"
+      "source": "/(.*)",
+      "destination": "/api"
     }
   ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "dist/precis-ui/server/server.mjs"
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "dist/precis-ui/**"
     }
-  ]
+  }
 }
