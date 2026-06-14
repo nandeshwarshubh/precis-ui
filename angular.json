@@ -20,6 +20,11 @@
             "polyfills": [
               "@angular/localize/init"
             ],
+            "security": {
+              "allowedHosts": [
+                "precis-ui-ng.vercel.app"
+              ]
+            },
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
